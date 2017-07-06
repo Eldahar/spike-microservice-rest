@@ -2,13 +2,26 @@ parameters:
   register.employee.handler.class: Microservice\RestBundle\Handler\RegisterEmployeeHandler
   quick.matching.handler.class: Microservice\RestBundle\Handler\QuickMatchingHandler
   register.employee.controller.class: Microservice\RestBundle\Controller\RegisterEmloyeeController
+  employee.request.transformer.class: Microservice\RestBundle\Transformer\EmployeeRequestTransformer
+  employee.rgistration.request.validator.class: Microservice\RestBundle\Validator\RegisterEmployeeValidator
+  json.response.transformer.class: Microservice\CoreBundle\Transformer\JSONResponseTransformer
 
 services:
+  employee.request.transformer:
+    class: %employee.request.transformer.class%
+    arguments:
+      - "@employee.rgistration.request.validator"
+
+  json.response.transformer:
+    class: %json.response.transformer.class%
+
   register.employee.controller:
     class: %register.employee.controller.class%
     lazy: true
     arguments:
       - "@register.employee.handler"
+      - "@employee.request.transformer"
+      - "@json.response.transformer"
 
   register.employee.handler:
     class: %register.employee.handler.class%
@@ -17,3 +30,6 @@ services:
 
   quick.matching.handler:
     class: %quick.matching.handler.class%
+
+  employee.rgistration.request.validator:
+    class: %employee.rgistration.request.validator.class%

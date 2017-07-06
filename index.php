@@ -4,6 +4,8 @@ require __DIR__."/vendor/autoload.php";
 require __DIR__."/container.php";
 require __DIR__."/route.php";
 
+\Symfony\Component\Debug\Debug::enable();
+
 $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 $context = new \Symfony\Component\Routing\RequestContext();

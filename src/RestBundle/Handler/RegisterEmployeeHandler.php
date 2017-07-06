@@ -3,6 +3,7 @@
 namespace Microservice\RestBundle\Handler;
 
 use Microservice\CoreBundle\Interfaces\MatchingHandlerInterface;
+use Microservice\RestBundle\DataObject\Employee;
 
 class RegisterEmployeeHandler {
     /**
@@ -17,9 +18,9 @@ class RegisterEmployeeHandler {
         $this->matchingHandler = $matchingHandler;
     }
 
-    public function handle(): array {
+    public function handle(Employee $employee): array {
         $response = [
-            'registration' => ['datas...'],
+            'registration' => ['name' => $employee->getName()],
             'matching' => $this->matchingHandler->match()
         ];
 

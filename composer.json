@@ -5,7 +5,9 @@
     "symfony/yaml": "~3.3",
     "symfony/config": "~3.3",
     "symfony/routing": "~3.3",
-    "symfony/http-foundation": "~3.3"
+    "symfony/http-foundation": "~3.3",
+    "symfony/debug": "~3.3",
+    "symfony/options-resolver": "~3.3"
   },
   "autoload": {
     "psr-4": {
