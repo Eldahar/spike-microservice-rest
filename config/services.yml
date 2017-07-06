@@ -1,0 +1,19 @@
+parameters:
+  register.employee.handler.class: Microservice\RestBundle\Handler\RegisterEmployeeHandler
+  quick.matching.handler.class: Microservice\RestBundle\Handler\QuickMatchingHandler
+  register.employee.controller.class: Microservice\RestBundle\Controller\RegisterEmloyeeController
+
+services:
+  register.employee.controller:
+    class: %register.employee.controller.class%
+    lazy: true
+    arguments:
+      - "@register.employee.handler"
+
+  register.employee.handler:
+    class: %register.employee.handler.class%
+    arguments:
+      - "@quick.matching.handler"
+
+  quick.matching.handler:
+    class: %quick.matching.handler.class%

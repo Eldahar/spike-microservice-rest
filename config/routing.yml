@@ -1,0 +1,3 @@
+register:
+  path: /register
+  defaults: { _controller: register.employee.controller }
