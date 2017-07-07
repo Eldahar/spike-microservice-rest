@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__."/vendor/autoload.php";
-require __DIR__."/container.php";
-require __DIR__."/route.php";
+require_once __DIR__."/vendor/autoload.php";
+require_once __DIR__."/container.php";
+require_once __DIR__."/route.php";
 
 \Symfony\Component\Debug\Debug::enable();
 
@@ -15,6 +15,11 @@ $urlMatcher = new ProjectUrlMatcher($context);
 $route = $urlMatcher->matchRequest($request);
 
 $container = new MyContainer();
+
+if(in_array($container->getParameter('environment'), ['local', 'dev'])) {
+    \Symfony\Component\Debug\Debug::enable();
+}
+
 /** @var \Microservice\CoreBundle\Interfaces\RestControllerInterface $controller */
 $controller = $container->get($route['_controller']);
 
