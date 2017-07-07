@@ -5,8 +5,12 @@ parameters:
   employee.request.transformer.class: Microservice\RestBundle\Transformer\EmployeeRequestTransformer
   employee.rgistration.request.validator.class: Microservice\RestBundle\Validator\RegisterEmployeeValidator
   json.response.transformer.class: Microservice\CoreBundle\Transformer\JSONResponseTransformer
+  test.garbagecollectable.service.class: Microservice\RestBundle\Handler\TestHandler
 
 services:
+  test.garbagecollectable.service:
+    class: %test.garbagecollectable.service.class%
+
   employee.request.transformer:
     class: %employee.request.transformer.class%
     arguments:
@@ -17,11 +21,12 @@ services:
 
   register.employee.controller:
     class: %register.employee.controller.class%
-    lazy: true
     arguments:
       - "@register.employee.handler"
       - "@employee.request.transformer"
       - "@json.response.transformer"
+    tags:
+      - { name: protected }
 
   register.employee.handler:
     class: %register.employee.handler.class%

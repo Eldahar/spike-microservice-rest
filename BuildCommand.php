@@ -22,14 +22,17 @@ class BuildCommand extends \Microservice\CoreBundle\Command\AbstractBuildCommand
     protected function createBuilder($parameterBag): \Symfony\Component\DependencyInjection\ContainerBuilder {
         $builder = new \Symfony\Component\DependencyInjection\ContainerBuilder($parameterBag);
 
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass());
+        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\RepeatedPass([
+            new \Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass(),
+            new \Microservice\CoreBundle\DependencyInjection\ContainerBuilder\RemoveUnusedDefinitionPass()
+        ]));
         $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ResolveClassPass());
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ResolveNamedArgumentsPass());
+        $builder->addCompilerPass(new \Microservice\CoreBundle\DependencyInjection\ContainerBuilder\RemoveClassPathParameters(), \Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_REMOVE);
+
+        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\RemovePrivateAliasesPass());
         $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ReplaceAliasByActualDefinitionPass());
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass());
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ResolveReferencesToAliasesPass());
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\ResolveServiceSubscribersPass());
-        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\RemoveUnusedDefinitionsPass());
+        $builder->addCompilerPass(new \Symfony\Component\DependencyInjection\Compiler\RemoveAbstractDefinitionsPass());
+
         $builder->addCompilerPass(new \Symfony\Component\Routing\DependencyInjection\RoutingResolverPass());
 
         return $builder;
